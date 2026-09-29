@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Catch the Ball Game</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111827;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 25px 0 10px;
+      color: #38bdf8;
+    }
+
+    .info {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      font-size: 20px;
+      margin: 15px;
+    }
+
+    #game {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+      height: 500px;
+      margin: 20px auto;
+      overflow: hidden;
+      background: linear-gradient(#1e3a8a, #0f172a);
+      border: 3px solid #38bdf8;
+      border-radius: 15px;
+    }
+
+    #ball {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: #facc15;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 20px #facc15;
+    }
+
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      background: #38bdf8;
+      color: #0f172a;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #7dd3fc;
+    }
+
+    #message {
+      font-size: 18px;
+      margin: 15px;
+      color: #facc15;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🎯 Catch the Ball</h1>
+
+  <div class="info">
+    <div>Score: <span id="score">0</span></div>
+    <div>Time: <span id="time">30</span>s</div>
+  </div>
+
+  <button id="startButton">Start Game</button>
+
+  <p id="message">Click Start Game to begin!</p>
+
+  <div id="game">
+    <div id="ball"></div>
+  </div>
+
+
+  <script>
+    const ball = document.getElementById("ball");
+    const game = document.getElementById("game");
+    const scoreDisplay = document.getElementById("score");
+    const timeDisplay = document.getElementById("time");
+    const startButton = document.getElementById("startButton");
+    const message = document.getElementById("message");
+
+    let score = 0;
+    let time = 30;
+    let gameRunning = false;
+    let timer;
+
+    ball.style.display = "none";
+
+    function moveBall() {
+      const maxX = game.clientWidth - ball.offsetWidth;
+      const maxY = game.clientHeight - ball.offsetHeight;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      ball.style.left = x + "px";
+      ball.style.top = y + "px";
+    }
+
+    function startGame() {
+      score = 0;
+      time = 30;
+      gameRunning = true;
+
+      scoreDisplay.textContent = score;
+      timeDisplay.textContent = time;
+
+      ball.style.display = "block";
+      startButton.textContent = "Restart Game";
+      message.textContent = "Catch the ball! 🎯";
+
+      moveBall();
+
+      clearInterval(timer);
+
+      timer = setInterval(() => {
+        time--;
+
+        timeDisplay.textContent = time;
+
+        if (time <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function endGame() {
+      gameRunning = false;
+
+      clearInterval(timer);
+
+      ball.style.display = "none";
+
+      message.textContent =
+        "Game Over! Your score is " + score + " 🎉";
+    }
+
+    ball.addEventListener("click", () => {
+      if (!gameRunning) {
+        return;
+      }
+
+      score++;
+
+      scoreDisplay.textContent = score;
+
+      moveBall();
+    });
+
+    startButton.addEventListener("click", startGame);
+  </script>
+
+</body>
+</html>
